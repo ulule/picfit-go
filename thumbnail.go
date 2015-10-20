@@ -11,8 +11,8 @@ import (
 	"github.com/facette/natsort"
 )
 
-// ThumbnailURLOptions struct.
-type ThumbnailURLOptions struct {
+// Options is the options passed to GenerateThumbnailURL() function.
+type Options struct {
 	Op            string
 	Crop          bool
 	Upscale       int
@@ -21,9 +21,9 @@ type ThumbnailURLOptions struct {
 	SecretKey     string
 }
 
-// NewThumbnailURLOptions returns a new ThumbnailURLOptions instance.
-func NewThumbnailURLOptions() *ThumbnailURLOptions {
-	return &ThumbnailURLOptions{
+// NewOptions returns a new Options instance.
+func NewOptions() *Options {
+	return &Options{
 		Op:            "thumbnail",
 		Crop:          false,
 		Upscale:       0,
@@ -48,7 +48,7 @@ func SignParams(key string, params map[string]string) string {
 }
 
 // GenerateThumbnailURL returns thumbnail URL without signature and query string.
-func GenerateThumbnailURL(path string, geometry string, options *ThumbnailURLOptions) (string, error) {
+func GenerateThumbnailURL(path string, geometry string, options *Options) (string, error) {
 	g, err := ParseGeometry(geometry)
 	if err != nil {
 		return "", err

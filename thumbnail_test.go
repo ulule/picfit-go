@@ -13,7 +13,7 @@ func TestGetThumbnailURL(t *testing.T) {
 
 	assert := assert.New(t)
 
-	options := NewThumbnailURLOptions()
+	options := NewOptions()
 	options.BaseURL = baseURL
 
 	url, _ := GenerateThumbnailURL("bidule.jpg", "30x30", options)
@@ -27,14 +27,14 @@ func TestGetThumbnailURL(t *testing.T) {
 
 	assert.Equal(url, expectedURL)
 
-	options = NewThumbnailURLOptions()
+	options = NewOptions()
 	options.BaseURL = baseURL
 	options.Upscale = 20
 	url, _ = GenerateThumbnailURL("bidule", "30x30", options)
 
 	assert.Contains(url, "?upscale=20")
 
-	options = NewThumbnailURLOptions()
+	options = NewOptions()
 	options.BaseURL = baseURL
 	options.Crop = true
 
