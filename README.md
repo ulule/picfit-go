@@ -4,7 +4,7 @@
 
 ## Installation
 
-```console
+```bash
 $ go get github.com/ulule/picfit-go
 ```
 
@@ -68,3 +68,9 @@ if err != nil {
 		fmt.Println("Oops, sorry guys")
 }
 ```
+
+## Contributing
+
+* Ping us on twitter [@thoas](https://twitter.com/thoas), [@oibafsellig](https://twitter.com/oibafsellig)
+* Fork the [project](https://github.com/ulule/picfit-go)
+* Fix [bugs](https://github.com/ulule/picfit-go/issues)
