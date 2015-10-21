@@ -24,13 +24,13 @@ Now, you can access the package through `picfit` namespace.
 
 ### GenerateThumbnailURL()
 
-The `GenerateThumbnailURL()` function returns a pre-formatted URL for Picfit server.
+The `GenerateThumbnailURL()` function returns a pre-formatted URL for picfit server.
 
-This function takes three parameters:
+This function takes three required parameters:
 
 * `path` - your original image path
 * `geometry` - width and height formatted like this: `widthxheight` (example: "20x30")
-* `options` - Picfit options
+* `options` - picfit options
 
 Supported options are:
 
