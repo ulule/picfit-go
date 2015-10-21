@@ -63,9 +63,9 @@ options.Crop = true
 Then, generate your URL:
 
 ```go
-url, err := picfit.GenerateThumbnailURL("http://example.com/image.jpg", "90x90", options)
+url, err := picfit.GenerateThumbnailURL("image.jpg", "90x90", options)
 if err != nil {
-		fmt.Println("Oops, sorry guys")
+	fmt.Println("Oops, sorry guys")
 }
 ```
 
