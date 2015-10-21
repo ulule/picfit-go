@@ -1,6 +1,8 @@
 # picfit-go
 
-**A Go client library for generating URLs with [Picfit](https://github.com/thoas/picfit).**
+[![Build Status](https://travis-ci.org/ulule/picfit-go.svg)](https://travis-ci.org/ulule/picfit-go)
+
+A Go client library for generating URLs with [picfit](https://github.com/thoas/picfit)
 
 ## Installation
 
