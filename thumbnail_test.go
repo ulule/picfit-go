@@ -2,11 +2,47 @@ package picfit
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestBuildParams(t *testing.T) {
+	is := assert.New(t)
+
+	params := map[string]string{
+		"w":    "20",
+		"h":    "20",
+		"op":   "thumbnail",
+		"path": "/my/path/to/image.jpg",
+	}
+
+	expected := url.Values{
+		"h":    []string{"20"},
+		"op":   []string{"thumbnail"},
+		"path": []string{"/my/path/to/image.jpg"},
+		"w":    []string{"20"},
+	}
+
+	is.EqualValues(BuildParams(params), expected)
+
+	params = map[string]string{
+		"w":    "20",
+		"h":    "",
+		"op":   "thumbnail",
+		"path": "/my/path/to/image.jpg",
+	}
+
+	expected = url.Values{
+		"op":   []string{"thumbnail"},
+		"path": []string{"/my/path/to/image.jpg"},
+		"w":    []string{"20"},
+	}
+
+	is.EqualValues(BuildParams(params), expected)
+}
 
 func TestGetThumbnailURL(t *testing.T) {
 	baseURL := "https://img.test.com"

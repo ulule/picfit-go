@@ -31,18 +31,31 @@ func NewOptions() *Options {
 	}
 }
 
-// SignParams returns signature from params.
-func SignParams(key string, params map[string]string) string {
-	mac := hmac.New(sha1.New, []byte(key))
+// BuildParams builds params for SignParams.
+func BuildParams(params map[string]string) url.Values {
 	var sortedKeys []string
+
 	for k := range params {
 		sortedKeys = append(sortedKeys, k)
 	}
+
 	natsort.Sort(sortedKeys)
+
 	values := url.Values{}
 	for _, k := range sortedKeys {
-		values.Add(k, params[k])
+		v := params[k]
+		if v != "" {
+			values.Add(k, v)
+		}
 	}
+
+	return values
+}
+
+// SignParams returns signature from params.
+func SignParams(key string, params map[string]string) string {
+	mac := hmac.New(sha1.New, []byte(key))
+	values := BuildParams(params)
 	mac.Write([]byte(values.Encode()))
 	return hex.EncodeToString(mac.Sum(nil))
 }
