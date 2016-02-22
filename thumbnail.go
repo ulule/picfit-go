@@ -24,8 +24,6 @@ type Options struct {
 // NewOptions returns a new Options instance.
 func NewOptions() *Options {
 	return &Options{
-		Op:            "thumbnail",
-		Crop:          false,
 		Upscale:       0,
 		DefaultMethod: "display",
 	}
@@ -67,11 +65,27 @@ func GenerateThumbnailURL(path string, geometry string, options *Options) (strin
 		return "", err
 	}
 
-	w, h, op := "", "", "thumbnail"
-
-	if options.Crop {
-		op = "resize"
+	supportedOps := map[string]bool{
+		"thumbnail": true,
+		"resize":    true,
+		"flip":      true,
+		"rotate":    true,
 	}
+
+	if options.Op == "" {
+		if options.Crop {
+			options.Op = "resize"
+		} else {
+			options.Op = "thumbnail"
+		}
+	} else {
+		if _, ok := supportedOps[options.Op]; !ok {
+			return "", fmt.Errorf("operation %s is not supported", options.Op)
+		}
+	}
+
+	w := ""
+	h := ""
 
 	if g.X != 0 {
 		w = strconv.Itoa(g.X)
@@ -84,7 +98,7 @@ func GenerateThumbnailURL(path string, geometry string, options *Options) (strin
 	params := map[string]string{
 		"w":    w,
 		"h":    h,
-		"op":   op,
+		"op":   options.Op,
 		"path": path,
 	}
 
