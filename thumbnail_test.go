@@ -92,3 +92,13 @@ func TestGetThumbnailURL(t *testing.T) {
 		sig)
 	is.Equal(expectedURL, url)
 }
+func BenchmarkBuildParams(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		BuildParams(map[string]string{
+			"w":    "20",
+			"h":    "20",
+			"op":   "thumbnail",
+			"path": "/my/path/to/image.jpg",
+		})
+	}
+}
