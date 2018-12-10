@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
-
-	"github.com/facette/natsort"
 )
 
 // Options is the options passed to GenerateThumbnailURL() function.
@@ -31,22 +29,12 @@ func NewOptions() *Options {
 
 // BuildParams builds params for SignParams.
 func BuildParams(params map[string]string) url.Values {
-	var sortedKeys []string
-
-	for k := range params {
-		sortedKeys = append(sortedKeys, k)
-	}
-
-	natsort.Sort(sortedKeys)
-
 	values := url.Values{}
-	for _, k := range sortedKeys {
-		v := params[k]
+	for k, v := range params {
 		if v != "" {
 			values.Add(k, v)
 		}
 	}
-
 	return values
 }
 
