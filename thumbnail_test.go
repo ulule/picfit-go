@@ -61,7 +61,7 @@ func TestGetThumbnailURL(t *testing.T) {
 
 	options = NewOptions()
 	options.BaseURL = baseURL
-	options.Upscale = 20
+	options.Upscale = newint(20)
 	url, _ = GenerateThumbnailURL("bidule", "30x30", options)
 	is.Contains(url, "?upscale=20")
 
@@ -92,6 +92,9 @@ func TestGetThumbnailURL(t *testing.T) {
 		sig)
 	is.Equal(expectedURL, url)
 }
+
+func newint(i int) *int { return &i }
+
 func BenchmarkBuildParams(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		BuildParams(map[string]string{

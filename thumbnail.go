@@ -13,7 +13,7 @@ import (
 type Options struct {
 	Op            string
 	Crop          bool
-	Upscale       int
+	Upscale       *int
 	BaseURL       string
 	DefaultMethod string
 	SecretKey     string
@@ -22,7 +22,6 @@ type Options struct {
 // NewOptions returns a new Options instance.
 func NewOptions() *Options {
 	return &Options{
-		Upscale:       0,
 		DefaultMethod: "display",
 	}
 }
@@ -90,8 +89,8 @@ func GenerateThumbnailURL(path string, geometry string, options *Options) (strin
 		"path": path,
 	}
 
-	if options.Upscale != 0 {
-		params["upscale"] = string(options.Upscale)
+	if options.Upscale != nil {
+		params["upscale"] = fmt.Sprint(*options.Upscale)
 	}
 
 	u := fmt.Sprintf(
@@ -105,8 +104,8 @@ func GenerateThumbnailURL(path string, geometry string, options *Options) (strin
 		params["path"],
 	)
 
-	if options.Upscale != 0 {
-		u = fmt.Sprintf("%s?upscale=%d", u, options.Upscale)
+	if options.Upscale != nil {
+		u = fmt.Sprintf("%s?upscale=%d", u, *options.Upscale)
 	}
 
 	return u, nil
