@@ -4,15 +4,13 @@ import (
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/hex"
-	"fmt"
 	"net/url"
 	"strconv"
 )
 
 // Options is the options passed to GenerateThumbnailURL() function.
 type Options struct {
-	Op            string
-	Crop          bool
+	Ops           []string
 	Upscale       *int
 	BaseURL       string
 	DefaultMethod string
@@ -26,87 +24,44 @@ func NewOptions() *Options {
 	}
 }
 
-// BuildParams builds params for SignParams.
-func BuildParams(params map[string]string) url.Values {
-	values := url.Values{}
-	for k, v := range params {
-		if v != "" {
-			values.Add(k, v)
-		}
-	}
-	return values
-}
-
-// SignParams returns signature from params.
-func SignParams(key string, params map[string]string) string {
+// SignParams returns values signature.
+func SignParams(key string, values url.Values) string {
 	mac := hmac.New(sha1.New, []byte(key))
-	values := BuildParams(params)
 	mac.Write([]byte(values.Encode()))
 	return hex.EncodeToString(mac.Sum(nil))
 }
 
 // GenerateThumbnailURL returns thumbnail URL without signature and query string.
 func GenerateThumbnailURL(path string, geometry string, options *Options) (string, error) {
+	values := make(url.Values)
+	values.Set("path", path)
+
 	g, err := ParseGeometry(geometry)
 	if err != nil {
 		return "", err
 	}
-
-	supportedOps := map[string]bool{
-		"thumbnail": true,
-		"resize":    true,
-		"flip":      true,
-		"rotate":    true,
-	}
-
-	if options.Op == "" {
-		if options.Crop {
-			options.Op = "resize"
-		} else {
-			options.Op = "thumbnail"
-		}
-	} else {
-		if _, ok := supportedOps[options.Op]; !ok {
-			return "", fmt.Errorf("operation %s is not supported", options.Op)
-		}
-	}
-
-	w := ""
-	h := ""
-
 	if g.X != 0 {
-		w = strconv.Itoa(g.X)
+		values.Set("w", strconv.Itoa(g.X))
 	}
-
 	if g.Y != 0 {
-		h = strconv.Itoa(g.Y)
+		values.Set("h", strconv.Itoa(g.Y))
 	}
 
-	params := map[string]string{
-		"w":    w,
-		"h":    h,
-		"op":   options.Op,
-		"path": path,
+	for i := range options.Ops {
+		values.Add("op", options.Ops[i])
 	}
 
 	if options.Upscale != nil {
-		params["upscale"] = fmt.Sprint(*options.Upscale)
+		values.Set("upscale", strconv.Itoa(*options.Upscale))
 	}
 
-	u := fmt.Sprintf(
-		"%s/%s/%s/%s/%sx%s/%s",
-		options.BaseURL,
-		options.DefaultMethod,
-		SignParams(options.SecretKey, params),
-		params["op"],
-		params["w"],
-		params["h"],
-		params["path"],
-	)
+	values.Set("sig", SignParams(options.SecretKey, values))
 
-	if options.Upscale != nil {
-		u = fmt.Sprintf("%s?upscale=%d", u, *options.Upscale)
+	u, err := url.Parse(options.BaseURL)
+	if err != nil {
+		return "", err
 	}
-
-	return u, nil
+	u.Path = options.DefaultMethod
+	u.RawQuery = values.Encode()
+	return u.String(), nil
 }
