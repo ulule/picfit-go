@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// Options is the options passed to GenerateThumbnailURL() function.
+// Options is the options passed to BuildURL.
 type Options struct {
 	Ops           []string
 	Upscale       *int
@@ -31,8 +31,8 @@ func SignParams(key string, values url.Values) string {
 	return hex.EncodeToString(mac.Sum(nil))
 }
 
-// GenerateThumbnailURL returns thumbnail URL without signature and query string.
-func GenerateThumbnailURL(path string, geometry string, options *Options) (string, error) {
+// BuildURL builds a picfit URL.
+func BuildURL(path string, geometry string, options *Options) (string, error) {
 	values := make(url.Values)
 	values.Set("path", path)
 

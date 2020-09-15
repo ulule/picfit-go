@@ -8,14 +8,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetThumbnailURL(t *testing.T) {
+func TestBuildURL(t *testing.T) {
 	baseURL := "https://img.test.com"
 	is := assert.New(t)
 
 	options := NewOptions()
 	options.BaseURL = baseURL
 	options.Ops = []string{"thumbnail"}
-	s, err := GenerateThumbnailURL("bidule.jpg", "30x30", options)
+	s, err := BuildURL("bidule.jpg", "30x30", options)
 	is.NoError(err)
 	u, err := url.Parse(s)
 	is.NoError(err)
@@ -29,14 +29,14 @@ func TestGetThumbnailURL(t *testing.T) {
 	options = NewOptions()
 	options.BaseURL = baseURL
 	options.Upscale = newint(20)
-	s, err = GenerateThumbnailURL("bidule", "30x30", options)
+	s, err = BuildURL("bidule", "30x30", options)
 	is.NoError(err)
 	is.Contains(s, "upscale=20")
 
 	options = NewOptions()
 	options.BaseURL = baseURL
 	options.Ops = []string{"resize"}
-	s, err = GenerateThumbnailURL("bidule.jpg", "30x30", options)
+	s, err = BuildURL("bidule.jpg", "30x30", options)
 	is.NoError(err)
 	u, err = url.Parse(s)
 	is.NoError(err)
