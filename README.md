@@ -34,8 +34,8 @@ This function takes three required parameters:
 
 Supported options are:
 
-* `Ops` - see [Operations](https://github.com/thoas/picfit#operations) (defaults to `thumbnail`)
-* `Upscale` - see [General Parameters](https://github.com/thoas/picfit#general-parameters) (defaults to `0`)
+* `Ops` - see [Operations](https://github.com/thoas/picfit#operations)
+* `Upscale` - see [General Parameters](https://github.com/thoas/picfit#general-parameters)
 * `DefaultMethod` - see [Methods](https://github.com/thoas/picfit#methods) (defaults to `display`)
 * `SecretKey` - your secret key (see [Security](https://github.com/thoas/picfit#security))
 
