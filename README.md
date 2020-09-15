@@ -22,9 +22,9 @@ Now, you can access the package through `picfit` namespace.
 
 ## API
 
-### GenerateThumbnailURL()
+### BuildURL()
 
-The `GenerateThumbnailURL()` function returns a pre-formatted URL for picfit server.
+The `BuildURL()` function returns a pre-formatted URL for picfit server.
 
 This function takes three required parameters:
 
@@ -34,8 +34,7 @@ This function takes three required parameters:
 
 Supported options are:
 
-* `Op` - see [Operations](https://github.com/thoas/picfit#operations) (defaults to `thumbnail`)
-* `Crop` - either crop image or not (`true` or `false`, defaults to `false`)
+* `Ops` - see [Operations](https://github.com/thoas/picfit#operations) (defaults to `thumbnail`)
 * `Upscale` - see [General Parameters](https://github.com/thoas/picfit#general-parameters) (defaults to `0`)
 * `DefaultMethod` - see [Methods](https://github.com/thoas/picfit#methods) (defaults to `display`)
 * `SecretKey` - your secret key (see [Security](https://github.com/thoas/picfit#security))
@@ -46,8 +45,6 @@ Options is just an instance of `Options` struct:
 // Create your own instance, with your own parameters.
 options := &picfit.Options{
 	Op:            "thumbnail",
-	Crop:          false,
-	Upscale:       0,
 	BaseURL:       "https://img.yourpicfitserver.com",
 	DefaultMethod: "display",
 	SecretKey:     "$ecretkeyplizkeepitseeeecret"
@@ -59,15 +56,14 @@ options := picfit.NewOptions()
 // And, of course, you can override everything...
 options.BaseURL = "https://img.superserver.com"
 options.SecretKey = "qwerty1234ohitsbad"
-options.Crop = true
 ```
 
 Then, generate your URL:
 
 ```go
-url, err := picfit.GenerateThumbnailURL("image.jpg", "90x90", options)
+url, err := picfit.BuildURL("image.jpg", "90x90", options)
 if err != nil {
-	fmt.Println("Oops, sorry guys")
+	return fmt.Errorf("couldn't build picfit URL: %w", err)
 }
 ```
 
