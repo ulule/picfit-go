@@ -2,7 +2,7 @@ package picfit
 
 import (
 	"fmt"
-	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,37 +15,32 @@ func TestBuildURL(t *testing.T) {
 	options := NewOptions()
 	options.BaseURL = baseURL
 	options.Ops = []string{"thumbnail"}
-	s, err := BuildURL("bidule.jpg", "30x30", options)
-	is.NoError(err)
-	u, err := url.Parse(s)
-	is.NoError(err)
-	expectedURL := fmt.Sprintf("%s/%s?h=30&op=thumbnail&path=bidule.jpg&sig=%s&w=30",
+	url, _ := BuildURL("bidule.jpg", "30x30", options)
+	sig := strings.Split(url, "/")[4]
+	expectedURL := fmt.Sprintf(
+		"%s/%s/%s/thumbnail/30x30/bidule.jpg",
 		options.BaseURL,
 		options.DefaultMethod,
-		u.Query().Get("sig"),
-	)
-	is.Equal(expectedURL, s)
+		sig)
+	is.Equal(expectedURL, url)
 
 	options = NewOptions()
 	options.BaseURL = baseURL
 	options.Upscale = newint(20)
-	s, err = BuildURL("bidule", "30x30", options)
-	is.NoError(err)
-	is.Contains(s, "upscale=20")
+	options.Ops = []string{"thumbnail"}
+	url, _ = BuildURL("bidule", "30x30", options)
+	is.Contains(url, "?upscale=20")
 
 	options = NewOptions()
 	options.BaseURL = baseURL
 	options.Ops = []string{"resize"}
-	s, err = BuildURL("bidule.jpg", "30x30", options)
-	is.NoError(err)
-	u, err = url.Parse(s)
-	is.NoError(err)
-	expectedURL = fmt.Sprintf("%s/%s?h=30&op=resize&path=bidule.jpg&sig=%s&w=30",
+	url, _ = BuildURL("bidule.jpg", "30x30", options)
+	sig = strings.Split(url, "/")[4]
+	expectedURL = fmt.Sprintf(
+		"%s/display/%s/resize/30x30/bidule.jpg",
 		options.BaseURL,
-		options.DefaultMethod,
-		u.Query().Get("sig"),
-	)
-	is.Equal(expectedURL, s)
+		sig)
+	is.Equal(expectedURL, url)
 }
 
 func newint(i int) *int { return &i }
