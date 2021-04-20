@@ -12,11 +12,12 @@ import (
 
 // Options is the options passed to BuildURL.
 type Options struct {
-	Ops           []string
-	Upscale       *int
 	BaseURL       string
 	DefaultMethod string
+	Ops           []string
+	Quality       string
 	SecretKey     string
+	Upscale       *int
 }
 
 // NewOptions returns a new Options instance.
@@ -55,6 +56,10 @@ func BuildURL(path string, geometry string, options *Options) (string, error) {
 		secretValues.Add("h", h)
 	}
 
+	if options.Quality != "" {
+		secretValues.Add("q", options.Quality)
+		extraValues.Add("q", options.Quality)
+	}
 	if options.Upscale != nil {
 		secretValues.Add("upscale", strconv.Itoa(*options.Upscale))
 		extraValues.Add("upscale", strconv.Itoa(*options.Upscale))
