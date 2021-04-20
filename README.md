@@ -35,6 +35,7 @@ This function takes three required parameters:
 Supported options are:
 
 * `Ops` - see [Operations](https://github.com/thoas/picfit#operations)
+* `Quality` - see [General Parameters](https://github.com/thoas/picfit#general-parameters)
 * `Upscale` - see [General Parameters](https://github.com/thoas/picfit#general-parameters)
 * `DefaultMethod` - see [Methods](https://github.com/thoas/picfit#methods) (defaults to `display`)
 * `SecretKey` - your secret key (see [Security](https://github.com/thoas/picfit#security))
